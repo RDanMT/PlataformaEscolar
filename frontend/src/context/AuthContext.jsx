@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const defaultTeacherProfile = { id: '2', name: 'Maestra Ana', email: 'ana@escuela.com', password: '123', role: 'Teacher' };
+    const [user, setUser] = useState(defaultTeacherProfile);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     // Semilla de usuarios falsos iniciales para GitHub Pages
@@ -22,23 +23,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         initializeMockDb();
-
-        const checkLoggedIn = () => {
-            const token = localStorage.getItem('token');
-            if (token) {
-                try {
-                    // El "token" simulado será simplemente un string con los datos del usuario JSON.stringify'd
-                    const userData = JSON.parse(token);
-                    setUser(userData);
-                } catch (err) {
-                    console.error('Error al recuperar sesión simulada:', err);
-                    localStorage.removeItem('token');
-                }
-            }
-            setLoading(false);
-        };
-
-        checkLoggedIn();
+        setUser(defaultTeacherProfile); // Auto-login as Teacher
     }, []);
 
     const login = async (email, password) => {
