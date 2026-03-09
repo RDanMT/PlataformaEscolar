@@ -1,0 +1,183 @@
+:root {
+    /* Color Palette: Bright & Playful Colors for Kids */
+    --primary: #FF7A00;
+    /* Bright Orange */
+    --primary-hover: #E86A00;
+    --secondary: #00C2FF;
+    /* Sky Blue */
+    --secondary-hover: #00A6DA;
+    --tertiary: #FF2E93;
+    /* Fun Pink */
+
+    --bg-color: #FFFDF5;
+    /* Soft Cream */
+    --surface: #FFFFFF;
+    --text-main: #2D3748;
+    /* Soft Navy */
+    --text-muted: #718096;
+
+    --success: #38A169;
+    --danger: #E53E3E;
+    --warning: #ECC94B;
+
+    --border: #E2E8F0;
+    --radius: 24px;
+    /* More rounded corners for friendly look */
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 8px 15px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 16px 25px rgba(0, 0, 0, 0.08);
+
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Fredoka', 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    background-image: radial-gradient(circle at 20% 20%, rgba(255, 122, 0, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(0, 194, 255, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255, 46, 147, 0.05) 0%, transparent 60%);
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Glassmorphism Classes Modified for Playful Theme */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(16px);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius);
+    transition: var(--transition);
+}
+
+.glass-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--secondary);
+}
+
+/* Base Layout */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Forms & Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 50px;
+    /* Pill shape for kids */
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--tertiary));
+    color: white;
+    box-shadow: 0 6px 15px rgba(255, 122, 0, 0.3);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 8px 20px rgba(255, 122, 0, 0.5);
+    transform: translateY(-3px) scale(1.05);
+}
+
+.auth-container {
+    min-height: calc(100vh - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top right, #FFE082 0%, transparent 50%),
+        radial-gradient(circle at bottom left, #81D4FA 0%, var(--bg-color) 70%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 420px;
+    padding: 3rem;
+    border-radius: 32px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 4px rgba(0, 194, 255, 0.2);
+    transform: scale(1.02);
+}
+
+.header-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: -webkit-linear-gradient(135deg, var(--primary), var(--tertiary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
