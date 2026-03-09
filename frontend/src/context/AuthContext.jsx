@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
@@ -9,21 +8,31 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    // Configurar Axios por defecto
-    axios.defaults.baseURL = 'http://localhost:5000';
+    // Semilla de usuarios falsos iniciales para GitHub Pages
+    const initializeMockDb = () => {
+        if (!localStorage.getItem('peke_users')) {
+            const initialUsers = [
+                { id: '1', name: 'Admin Principal', email: 'admin@escuela.com', password: '123', role: 'Admin' },
+                { id: '2', name: 'Maestra Ana', email: 'ana@escuela.com', password: '123', role: 'Teacher' },
+                { id: '3', name: 'Carlitos', email: 'carlitos@escuela.com', password: '123', role: 'Student' }
+            ];
+            localStorage.setItem('peke_users', JSON.stringify(initialUsers));
+        }
+    };
 
     useEffect(() => {
-        const checkLoggedIn = async () => {
+        initializeMockDb();
+
+        const checkLoggedIn = () => {
             const token = localStorage.getItem('token');
             if (token) {
-                axios.defaults.headers.common['x-auth-token'] = token;
                 try {
-                    const res = await axios.get('/api/auth/me');
-                    setUser(res.data);
+                    // El "token" simulado será simplemente un string con los datos del usuario JSON.stringify'd
+                    const userData = JSON.parse(token);
+                    setUser(userData);
                 } catch (err) {
-                    console.error('Error al recuperar sesión:', err);
+                    console.error('Error al recuperar sesión simulada:', err);
                     localStorage.removeItem('token');
-                    delete axios.defaults.headers.common['x-auth-token'];
                 }
             }
             setLoading(false);
@@ -33,32 +42,58 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
+        // Simular retraso de red
+        await new Promise(resolve => setTimeout(resolve, 800));
+
         try {
-            const res = await axios.post('/api/auth/login', { email, password });
-            localStorage.setItem('token', res.data.token);
-            setUser(res.data.user);
-            axios.defaults.headers.common['x-auth-token'] = res.data.token;
-            return { success: true };
+            const users = JSON.parse(localStorage.getItem('peke_users')) || [];
+            const foundUser = users.find(u => u.email === email && u.password === password);
+
+            if (foundUser) {
+                const { password, ...userWithoutPassword } = foundUser;
+                const fakeToken = JSON.stringify(userWithoutPassword); // Mock Token
+
+                localStorage.setItem('token', fakeToken);
+                setUser(userWithoutPassword);
+                return { success: true };
+            } else {
+                return { success: false, msg: 'Credenciales inválidas (Prueba usando admin@escuela.com y 123)' };
+            }
         } catch (err) {
-            console.error('Login error:', err.response?.data?.msg || err.message);
-            return { success: false, msg: err.response?.data?.msg || 'Error al iniciar sesión' };
+            return { success: false, msg: 'Error de simulación al iniciar sesión' };
         }
     };
 
     const register = async (name, email, password, role) => {
+        // Simular retraso de red
+        await new Promise(resolve => setTimeout(resolve, 800));
+
         try {
-            const res = await axios.post('/api/auth/register', { name, email, password, role });
-            // Después del registro exitoso, se podría hacer login automático o redirigir al login
+            const users = JSON.parse(localStorage.getItem('peke_users')) || [];
+
+            if (users.find(u => u.email === email)) {
+                return { success: false, msg: 'El correo electrónico ya está registrado' };
+            }
+
+            const newUser = {
+                id: Date.now().toString(),
+                name,
+                email,
+                password,
+                role
+            };
+
+            users.push(newUser);
+            localStorage.setItem('peke_users', JSON.stringify(users));
+
             return { success: true };
         } catch (err) {
-            console.error('Register error:', err.response?.data?.msg || err.message);
-            return { success: false, msg: err.response?.data?.msg || 'Error al registrarse' };
+            return { success: false, msg: 'Error de simulación al registrarse' };
         }
     };
 
     const logout = () => {
         localStorage.removeItem('token');
-        delete axios.defaults.headers.common['x-auth-token'];
         setUser(null);
         navigate('/login');
     };
